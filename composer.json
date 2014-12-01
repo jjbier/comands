@@ -1,0 +1,18 @@
+{
+    "name": "eryx/commands-utility",
+    "description": "This package contains utility commands writer with symfony command components",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Xabier Fernández Rodríguez",
+            "email": "jjbier@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "2.6.x-dev"
+    },
+    "autoload": {
+        "psr-4": { "": "src" }
+    }
+}
