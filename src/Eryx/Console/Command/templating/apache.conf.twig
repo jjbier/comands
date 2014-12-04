@@ -1,0 +1,42 @@
+<VirtualHost *:80>
+    ServerName      {{ domain }}
+    ServerAlias     www.{{ domain }}
+
+    {% for vars in environmentVariables %}
+    SetEnv {{ vars | raw }}
+    {% endfor %}
+
+    DocumentRoot    "/{{ application }}/{{ domain }}/web"
+    DirectoryIndex  app.php
+
+    <Directory "/{{ application }}/{{ domain }}/web">
+        AllowOverride None
+        Allow from All
+
+        <IfModule mod_rewrite.c>
+            Options -MultiViews
+            RewriteEngine On
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteRule ^(.*)$ app.php [QSA,L]
+        </IfModule>
+    </Directory>
+
+    CustomLog  /{{apacheLog}}/{{ domain }}-access.log combined
+
+    KeepAlive            On
+    MaxKeepAliveRequests 200
+    KeepAliveTimeout     5
+
+    AddOutputFilterByType DEFLATE text/css text/plain text/html application/xhtml+xml text/xml application/xml
+
+    <IfModule mod_headers.c>
+        Header append Vary User-Agent env=!dont-vary
+
+        ExpiresActive On
+        ExpiresDefault "now plus 1 week"
+        ExpiresByType image/x-icon "now plus 1 month"
+        ExpiresByType image/gif    "now plus 1 month"
+        ExpiresByType image/png    "now plus 1 month"
+        ExpiresByType image/jpeg   "now plus 1 month"
+    </IfModule>
+</VirtualHost>
